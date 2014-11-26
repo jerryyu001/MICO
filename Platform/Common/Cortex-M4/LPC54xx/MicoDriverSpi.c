@@ -61,7 +61,7 @@ OSStatus MicoSpiInitialize( const mico_spi_device_t* spi )
 
 OSStatus MicoSpiTransfer( const mico_spi_device_t* spi, mico_spi_message_segment_t* segments, uint16_t number_of_segments )
 {
-  
+ printf("MiSpiT. "); 
   
   return kNoErr;
 }

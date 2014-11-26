@@ -12,3 +12,11 @@ Build/*
 si/*
 
 *.swp
+
+*.out
+
+csout/cs.out.in
+
+csout/cs.out.po
+
+tags

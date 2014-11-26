@@ -338,6 +338,90 @@
       </data>
     </settings>
   </configuration>
+  <configuration>
+    <name>NXP_54xx_1</name>
+    <toolchain>
+      <name>ARM</name>
+    </toolchain>
+    <debug>0</debug>
+    <settings>
+      <name>RuntimeChecking</name>
+      <archiveVersion>0</archiveVersion>
+      <data>
+        <version>2</version>
+        <wantNonLocal>1</wantNonLocal>
+        <debug>0</debug>
+        <option>
+          <name>GenRtcDebugHeap</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>GenRtcEnableBoundsChecking</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>GenRtcCheckPtrsNonInstrMem</name>
+          <state>1</state>
+        </option>
+        <option>
+          <name>GenRtcTrackPointerBounds</name>
+          <state>1</state>
+        </option>
+        <option>
+          <name>GenRtcCheckAccesses</name>
+          <state>1</state>
+        </option>
+        <option>
+          <name>GenRtcGenerateEntries</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>GenRtcNrTrackedPointers</name>
+          <state>1000</state>
+        </option>
+        <option>
+          <name>GenRtcIntOverflow</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>GenRtcIncUnsigned</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>GenRtcIntConversion</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>GenRtcInclExplicit</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>GenRtcIntShiftOverflow</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>GenRtcInclUnsignedShiftOverflow</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>GenRtcUnhandledCase</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>GenRtcDivByZero</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>GenRtcEnable</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>GenRtcCheckPtrsNonInstrFunc</name>
+          <state>1</state>
+        </option>
+      </data>
+    </settings>
+  </configuration>
   <group>
     <name>Application</name>
     <file>
@@ -789,6 +873,72 @@
       <group>
         <name>Cortex-M4</name>
         <group>
+          <name>LPC54xx</name>
+          <group>
+            <name>ForEMW1062_Drv</name>
+            <file>
+              <name>$PROJ_DIR$\..\..\..\Platform\Common\Cortex-M4\LPC54xx\EMW1062_Driver\read_wifi_firmware.c</name>
+            </file>
+            <file>
+              <name>$PROJ_DIR$\..\..\..\Platform\Common\Cortex-M4\LPC54xx\EMW1062_Driver\wlan_platform.c</name>
+            </file>
+            <file>
+              <name>$PROJ_DIR$\..\..\..\Platform\Common\Cortex-M4\LPC54xx\EMW1062_Driver\SPI\wwd_bus.c</name>
+            </file>
+          </group>
+          <file>
+            <name>$PROJ_DIR$\..\..\..\Platform\Common\Cortex-M4\LPC54xx\board_nxp_lpcxpresso_54000.a</name>
+          </file>
+          <file>
+            <name>$PROJ_DIR$\..\..\..\Platform\Common\Cortex-M4\LPC54xx\chip_540xx_lib.a</name>
+          </file>
+          <file>
+            <name>$PROJ_DIR$\..\..\..\Platform\Common\Cortex-M4\LPC54xx\gpio_irq.c</name>
+          </file>
+          <file>
+            <name>$PROJ_DIR$\..\..\..\Platform\Common\Cortex-M4\LPC54xx\gpio_irq.h</name>
+          </file>
+          <file>
+            <name>$PROJ_DIR$\..\..\..\Platform\Common\Cortex-M4\LPC54xx\lpc1800_freertos.c</name>
+          </file>
+          <file>
+            <name>$PROJ_DIR$\..\..\..\Platform\Common\Cortex-M4\LPC54xx\MicoDriverAdc.c</name>
+          </file>
+          <file>
+            <name>$PROJ_DIR$\..\..\..\Platform\Common\Cortex-M4\LPC54xx\MicoDriverFlash.c</name>
+          </file>
+          <file>
+            <name>$PROJ_DIR$\..\..\..\Platform\Common\Cortex-M4\LPC54xx\MicoDriverGpio.c</name>
+          </file>
+          <file>
+            <name>$PROJ_DIR$\..\..\..\Platform\Common\Cortex-M4\LPC54xx\MicoDriverI2c.c</name>
+          </file>
+          <file>
+            <name>$PROJ_DIR$\..\..\..\Platform\Common\Cortex-M4\LPC54xx\MicoDriverPwm.c</name>
+          </file>
+          <file>
+            <name>$PROJ_DIR$\..\..\..\Platform\Common\Cortex-M4\LPC54xx\MicoDriverRng.c</name>
+          </file>
+          <file>
+            <name>$PROJ_DIR$\..\..\..\Platform\Common\Cortex-M4\LPC54xx\MicoDriverRtc.c</name>
+          </file>
+          <file>
+            <name>$PROJ_DIR$\..\..\..\Platform\Common\Cortex-M4\LPC54xx\MicoDriverSpi.c</name>
+          </file>
+          <file>
+            <name>$PROJ_DIR$\..\..\..\Platform\Common\Cortex-M4\LPC54xx\MicoDriverUart.c</name>
+          </file>
+          <file>
+            <name>$PROJ_DIR$\..\..\..\Platform\Common\Cortex-M4\LPC54xx\MicoDriverWdg.c</name>
+          </file>
+          <file>
+            <name>$PROJ_DIR$\..\..\..\Platform\Common\Cortex-M4\LPC54xx\nxp_platform.c</name>
+          </file>
+          <file>
+            <name>$PROJ_DIR$\..\..\..\Platform\Common\Cortex-M4\LPC54xx\nxp_platform.h</name>
+          </file>
+        </group>
+        <group>
           <name>STM32F4xx</name>
           <group>
             <name>EMW1062_Driver</name>
@@ -1070,6 +1220,24 @@
       </file>
       <file>
         <name>$PROJ_DIR$\..\..\..\Platform\Nucleo_411RE\platform_common_config.h</name>
+      </file>
+    </group>
+    <group>
+      <name>NXP_54xx_1</name>
+      <file>
+        <name>$PROJ_DIR$\..\..\..\Platform\Nxp54xx\iar_startup_lpc540xx.s</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\..\Platform\Nxp54xx\platform.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\..\Platform\Nxp54xx\platform.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\..\Platform\Nxp54xx\platform_common_config.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\..\Platform\Nxp54xx\sysinit.c</name>
       </file>
     </group>
   </group>
