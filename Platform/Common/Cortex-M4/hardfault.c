@@ -28,7 +28,7 @@
 *  IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ******************************************************************************
 */ 
-
+#ifdef STM32F4XX
 #include "stdio.h"
 #include "stm32f4xx.h"
 #include "MicoRTOS.h"
@@ -105,3 +105,46 @@ void hard_fault_handler_c (unsigned int * hardfault_args)
  
   while (1);
 }
+
+#else
+#ifdef LPC54XX
+/*
+#include "stdio.h"
+
+#include "MicoRTOS.h"
+#include "MicoDefaults.h"
+#include "MicoPlatform.h"
+#include "platform_common_config.h"
+#include "nxp_platform.h"
+*/
+#include "board.h"
+
+struct exception_stack_frame
+{
+	uint32_t r0;
+	uint32_t r1;
+	uint32_t r2;
+	uint32_t r3;
+	uint32_t r12;
+	uint32_t lr;
+	uint32_t pc;
+	uint32_t psr;
+};
+
+
+void hard_fault_handler_c (struct exception_stack_frame* contex)
+{
+	DEBUGOUT("psr: 0x%08x\n", contex->psr);
+	DEBUGOUT(" pc: 0x%08x\n", contex->pc);
+	DEBUGOUT(" lr: 0x%08x\n", contex->lr);
+	DEBUGOUT("r12: 0x%08x\n", contex->r12);
+	DEBUGOUT("r03: 0x%08x\n", contex->r3);
+	DEBUGOUT("r02: 0x%08x\n", contex->r2);
+	DEBUGOUT("r01: 0x%08x\n", contex->r1);
+	DEBUGOUT("r00: 0x%08x\n", contex->r0);  
+ 
+  while (1);
+}
+#endif
+
+#endif
