@@ -20,3 +20,7 @@ csout/cs.out.in
 csout/cs.out.po
 
 tags
+
+.ycm_extra_conf.py
+
+*.pyc

@@ -82,7 +82,7 @@ void CTIMER0_IRQHandler(void)
   if (Chip_TIMER_MatchPending(LPC_CTIMER0, 1)) {
     Chip_TIMER_ClearMatch(LPC_CTIMER0, 1);
 //  LPC_CTIMER0->IR = TIMER_IR_CLR(1);
-    Board_LED_Toggle(2);
+//    Board_LED_Toggle(2);
     timer0_cnt++;
   }
 }
@@ -105,6 +105,19 @@ void set(void)
 //  printf("SystemCoreClock %d\r\n", SystemCoreClock);
 //  Chip_TIMER_ResetOnMatchEnable(LPC_CTIMER0, 1);
 //  Chip_TIMER_Enable(LPC_CTIMER0);
+  Chip_IOCON_PinMuxSet(LPC_IOCON, 0, 29, (IOCON_FUNC0 | IOCON_GPIO_MODE | IOCON_MODE_PULLUP | IOCON_DIGITAL_EN));
+  Chip_GPIO_SetPinDIROutput(LPC_GPIO, 0, 29);
+  Chip_GPIO_SetPinState(LPC_GPIO, 0, 29, 0);
+  
+  Chip_IOCON_PinMuxSet(LPC_IOCON, 0, 30, (IOCON_FUNC0 | IOCON_GPIO_MODE | IOCON_MODE_PULLUP | IOCON_DIGITAL_EN));
+  Chip_GPIO_SetPinDIROutput(LPC_GPIO, 0, 30);
+  Chip_GPIO_SetPinState(LPC_GPIO, 0, 30, 1);
+  
+  Chip_IOCON_PinMuxSet(LPC_IOCON, 0, 31, (IOCON_FUNC0 | IOCON_GPIO_MODE | IOCON_MODE_PULLUP | IOCON_DIGITAL_EN));
+  Chip_GPIO_SetPinDIROutput(LPC_GPIO, 0, 31);
+  Chip_GPIO_SetPinState(LPC_GPIO, 0, 31, 1);
+  
+  host_platform_bus_init();
   
   STATUS_GPIO_Init();
   BOOT_GPIO_Init();

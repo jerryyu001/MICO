@@ -38,6 +38,8 @@
 #include "platform_common_config.h"
 #include "PlatformLogging.h"
 
+#include "board.h"
+
 /******************************************************
 *                      Macros
 ******************************************************/
@@ -413,6 +415,7 @@ void init_platform( void )
 {
   platform_log( "init_platform" );
   RESET_GPIO_Init();
+  MicoFlashInitialize( MICO_SPI_FLASH );
 }
 
 void init_platform_bootloader( void )
@@ -438,20 +441,21 @@ void host_platform_power_wifi( bool power_enabled )
 
 void MicoSysLed(bool onoff)
 {
-  platform_log( "MicoSysLed" );
-  Board_LED_Set(0, onoff);
+ // Board_LED_Set(0, onoff);
+  Chip_GPIO_SetPinState(LPC_GPIO, 0, 29, onoff);
 }
 
 void MicoRfLed(bool onoff)
 {
-  platform_log( "MicoRfLed" );
-  Board_LED_Set(1, onoff);
+ // Board_LED_Set(1, onoff);
+  Chip_GPIO_SetPinState(LPC_GPIO, 0, 30, onoff);
 }
 
 void Mico2rdLED(bool onoff)
 {
   platform_log( "Mico2rdLED" );
-  Board_LED_Set(2, onoff);
+  //Board_LED_Set(2, onoff);
+   Chip_GPIO_SetPinState(LPC_GPIO, 0, 31, onoff);
 }
 
 

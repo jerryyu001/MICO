@@ -459,10 +459,10 @@ void easylink_thread(void *inContext)
     mico_rtos_unlock_mutex(&Context->flashContentInRam_mutex);
     _easylinkConnectWiFi_fast(Context);
   }
-
+  easylink_log("Start easylink ..1.");
   err = mico_rtos_get_semaphore(&easylink_sem, EasyLink_ConnectWlan_Timeout);
   require_noerr(err, reboot);
-
+  easylink_log("Start easylink ..2.");
   httpHeader = HTTPHeaderCreate();
   require_action( httpHeader, threadexit, err = kNoMemoryErr );
   HTTPHeaderClear( httpHeader );

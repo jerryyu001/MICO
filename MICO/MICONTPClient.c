@@ -42,6 +42,7 @@
 
 #define UNIX_OFFSET 		         2208960000U
 #define NTP_Server               "time.asia.apple.com"
+#define NTP_Server_1               "ntp.sjtu.edu.cn"
 #define NTP_Port                 123
 #define NTP_Flags                0xdb 
 #define NTP_Stratum              0x0
@@ -135,7 +136,12 @@ void NTPClient_thread(void *inContext)
 
    while(1) {
      err = gethostbyname(NTP_Server, (uint8_t *)ipstr, 16);
+     //require_noerr(err, ReConnWithDelay);
+	 if(err){
+	 ntp_log("NTP server address: %s",ipstr);
+	 err = gethostbyname(NTP_Server_1, (uint8_t *)ipstr, 16);
      require_noerr(err, ReConnWithDelay);
+	 }
      ntp_log("NTP server address: %s",ipstr);
      break;
 

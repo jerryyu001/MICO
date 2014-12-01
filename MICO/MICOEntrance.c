@@ -261,6 +261,7 @@ static void mico_mfg_test(void)
   mico_thread_sleep(MICO_NEVER_TIMEOUT);
 }
 
+extern uint8_t EASYLINK_GPIO_Get(void); // Magicoe Jer cp from NXP1127
 int application_start(void)
 {
   OSStatus err = kNoErr;
@@ -296,6 +297,13 @@ int application_start(void)
   MicoSysLed(true);
   mico_log("Free memory %d bytes", MicoGetMemoryInfo()->free_memory) ; 
 wifimgr_debug_enable(1);
+  if (EASYLINK_GPIO_Get()== 0) { //Jer cp from NXP1127 ,test
+     printf("Easylink push\r\n");
+    PlatformEasyLinkButtonLongPressedCallback();
+  }
+  else {
+    printf("Easylink Not push\r\n");
+  }    
   /* Enter test mode, call a build-in test function amd output on STDIO */
   if(MicoShouldEnterMFGMode()==true)
     mico_mfg_test();

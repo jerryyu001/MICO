@@ -36,8 +36,6 @@
 
 #include "platform.h" //gpio conf in board.h
 #include "platform_common_config.h"
-#include "PlatformLogging.h"
-//#include "chip.h"
 
 /******************************************************
 *                    Constants
