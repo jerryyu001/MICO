@@ -32,9 +32,7 @@
 /* lwIP includes. */
 #include <stdio.h>
 #include "MicoRtos.h"
-//#include "a_types.h"
-//#include "FREERTOS.h"
-//#include "sys_arch.h"
+
 #include "board.h"
 #include "string.h"
 #include "stdio.h"
@@ -92,8 +90,8 @@ void DMA_IRQHandler(void)
 uint8_t SPI_DMA_Init(void)
 {
   uint8_t ret = false;
-  bool    err = false;
-  uint32_t i = 0;
+  //bool    err = false;
+  //uint32_t i = 0;
   bDMASPITXDoneFlag = bDMASPIRXDoneFlag = false;
 /* DMA initialization - enable DMA clocking and reset DMA if needed */
   Chip_DMA_Init(LPC_DMA);
@@ -117,7 +115,7 @@ uint8_t SPI_DMA_Init(void)
 uint8_t SPI_DMA_DeInit(void)
 {
   uint8_t ret = false;
-  bool    err = false;
+  //bool    err = false;
   
   bDMASPITXDoneFlag = bDMASPIRXDoneFlag = false;
   
@@ -175,10 +173,10 @@ uint8_t ADC_DeInit(void)
   return true;
 }
 
-void QCA_SYS_DELAY(uint32_t time)
-{
-  vTaskDelay(time);
-}
+//void QCA_SYS_DELAY(uint32_t time)
+//{
+//  vTaskDelay(time);
+//}
 
 #define GPIO_GPOWKE_PORT	0  // 0
 #define GPIO_GPOWKE_PIN		22 // 29
@@ -221,8 +219,6 @@ void QCA_SYS_DELAY(uint32_t time)
 #define GPIO_EASYLINK_PIN       18
 #define GPIO_EASYLINK_INDEX	PININTSELECT7	/* PININT index used for GPIO mapping */
 
-//#define A_VOID void 
-//extern A_VOID Custom_HW_InterruptHandler(A_VOID *pointer); // Magicoe
 void PIN_INT0_IRQHandler(void)
 {
   Chip_PININT_ClearIntStatus(LPC_PININT, PININTCH(GPIO_SPIINT_INDEX)); 
@@ -265,14 +261,16 @@ void PIN_INT6_IRQHandler(void)
   printf("standby button\r\n");
 }
 
-static uint32_t _default_start_time = 0;
-static mico_timer_t _button_EL_timer;
+//static uint32_t _default_start_time = 0;
+//static mico_timer_t _button_EL_timer;
 #define RestoreDefault_TimeOut          3000  /**< Restore default and start easylink after 
                                                 press down EasyLink button for 3 seconds. */
 
+extern void PlatformEasyLinkButtonClickedCallback(void);
 void PIN_INT7_IRQHandler(void)
 {
- int interval = -1;
+//  int interval = -1;
+  
   Chip_PININT_ClearIntStatus(LPC_PININT, PININTCH(GPIO_EASYLINK_INDEX)); 
   
   if ( Chip_GPIO_ReadPortBit(LPC_GPIO, GPIO_EASYLINK_PORT, GPIO_EASYLINK_PIN) == 0 ) {
@@ -300,22 +298,32 @@ void GINT0_IRQHandler(void)
 }
 */
 
+ /*  
+void PIN_INT1_IRQHandler(void)
+{
+ int interval = -1;
+  Chip_PININT_ClearIntStatus(LPC_PININT, PININTCH(GPIO_EASYLINK_INDEX)); 
+  printf("Easylink\r\n");
+ 
+  if ( Chip_GPIO_ReadPortBit(LPC_GPIO, GPIO_EASYLINK_PORT, GPIO_EASYLINK_PIN) == 0 ) {
+    _default_start_time = mico_get_time()+1;
+    mico_start_timer(&_button_EL_timer);
+  } else {
+    interval = mico_get_time() + 1 - _default_start_time;
+    if ( (_default_start_time != 0) && interval > 50 && interval < RestoreDefault_TimeOut){
+      PlatformEasyLinkButtonClickedCallback();
+    }
+    mico_stop_timer(&_button_EL_timer);
+    _default_start_time = 0;
+  }
+}
+*/
 
 uint8_t STATUS_GPIO_Init(void)
 {
   Chip_GPIO_SetPinState(LPC_GPIO, GPIO_STATUS_PORT, GPIO_STATUS_PIN, 1);
   Chip_IOCON_PinMuxSet(LPC_IOCON, GPIO_STATUS_PORT, GPIO_STATUS_PIN, (IOCON_FUNC0 | IOCON_GPIO_MODE | IOCON_MODE_PULLUP | IOCON_DIGITAL_EN));
   Chip_GPIO_SetPinDIRInput(LPC_GPIO, GPIO_STATUS_PORT, GPIO_STATUS_PIN);
-  
-  /*
-  Chip_PININT_Init(LPC_PININT);
-
-  Chip_INMUX_PININT_Config(LPC_INMUX, GPIO_STATUS_INDEX, GPIO_STATUS_PORT, GPIO_STATUS_PIN);
-
-  Chip_PININT_ClearIntStatus(LPC_PININT, PININTCH(GPIO_STATUS_INDEX));
-  Chip_PININT_SetPinModeEdge(LPC_PININT, PININTCH(GPIO_STATUS_INDEX));
-  Chip_PININT_EnableIntHigh(LPC_PININT, PININTCH(GPIO_STATUS_INDEX));
-  */
   return true;
 }
 
@@ -324,16 +332,6 @@ uint8_t BOOT_GPIO_Init(void)
   Chip_GPIO_SetPinState(LPC_GPIO, GPIO_BOOT_PORT, GPIO_BOOT_PIN, 1);
   Chip_IOCON_PinMuxSet(LPC_IOCON, GPIO_BOOT_PORT, GPIO_BOOT_PIN, (IOCON_FUNC0 | IOCON_GPIO_MODE | IOCON_MODE_PULLUP | IOCON_DIGITAL_EN));
   Chip_GPIO_SetPinDIRInput(LPC_GPIO, GPIO_BOOT_PORT, GPIO_BOOT_PIN);
-  
-  /*
-  Chip_PININT_Init(LPC_PININT);
-
-  Chip_INMUX_PININT_Config(LPC_INMUX, GPIO_BOOT_INDEX, GPIO_BOOT_PORT, GPIO_BOOT_PIN);
-
-  Chip_PININT_ClearIntStatus(LPC_PININT, PININTCH(GPIO_BOOT_INDEX));
-  Chip_PININT_SetPinModeEdge(LPC_PININT, PININTCH(GPIO_BOOT_INDEX));
-  Chip_PININT_EnableIntHigh(LPC_PININT, PININTCH(GPIO_BOOT_INDEX));
-  */
   return true;
 }
 
@@ -352,9 +350,6 @@ uint8_t EASYLINK_GPIO_Init(void)
   Chip_GPIO_SetPinState(LPC_GPIO, GPIO_EASYLINK_PORT, GPIO_EASYLINK_PIN, 1);
   Chip_IOCON_PinMuxSet(LPC_IOCON, GPIO_EASYLINK_PORT, GPIO_EASYLINK_PIN, (IOCON_FUNC0 | IOCON_MODE_PULLUP | IOCON_GPIO_MODE | IOCON_DIGITAL_EN));
   Chip_GPIO_SetPinDIRInput(LPC_GPIO, GPIO_EASYLINK_PORT, GPIO_EASYLINK_PIN);
-//  
-//  Chip_PININT_Init(LPC_PININT);
-  
   return true;
 }
 
@@ -985,6 +980,8 @@ uint32_t SPI_DATA_WRITE(uint8_t * pBuffer, uint32_t length)
 {
   uint32_t transfer_size;
   OSStatus result;
+  uint32_t junk;
+  
 //  printf("SPI_DATA_WRITE 0x%x\r\n", length);
   spi_cs_Set(0);
   
@@ -1016,10 +1013,10 @@ uint32_t SPI_DATA_WRITE(uint8_t * pBuffer, uint32_t length)
   if(length<=1000) {
     Chip_SPI_ClearStatus(LPC_SPI0, SPI_STAT_RXOV | SPI_STAT_TXUR | SPI_STAT_SSA | SPI_STAT_SSD);
 
-  Chip_DMA_InitChannel( DMAREQ_SPI0_RX, DMA_ADDR(&LPC_SPI0->RXDAT), DMA_XFERCFG_SRCINC_0, 
-                        DMA_ADDR(&pBuffer[0]), DMA_XFERCFG_DSTINC_1, WIDTH_8_BITS,
-                        length, (DMA_CFG_PERIPHREQEN | DMA_CFG_BURSTPOWER_1 | DMA_CFG_CHPRIORITY(1)));
-  Chip_DMA_StartTransfer(DMAREQ_SPI0_RX, DMA_XFERCFG_SRCINC_0, DMA_XFERCFG_DSTINC_1, DMA_XFERCFG_WIDTH_8, length);
+    Chip_DMA_InitChannel( DMAREQ_SPI0_RX, DMA_ADDR(&LPC_SPI0->RXDAT), DMA_XFERCFG_SRCINC_0, 
+                          DMA_ADDR(&junk), DMA_XFERCFG_DSTINC_0, WIDTH_8_BITS,
+                          length, (DMA_CFG_PERIPHREQEN | DMA_CFG_BURSTPOWER_1 | DMA_CFG_CHPRIORITY(1)));
+    Chip_DMA_StartTransfer(DMAREQ_SPI0_RX, DMA_XFERCFG_SRCINC_0, DMA_XFERCFG_DSTINC_0, DMA_XFERCFG_WIDTH_8, length);
 
     Chip_DMA_InitChannel( DMAREQ_SPI0_TX, DMA_ADDR(&pBuffer[0]), DMA_XFERCFG_SRCINC_1,
                           DMA_ADDR(&LPC_SPI0->TXDAT), DMA_XFERCFG_DSTINC_0, WIDTH_8_BITS,
@@ -1032,9 +1029,9 @@ uint32_t SPI_DATA_WRITE(uint8_t * pBuffer, uint32_t length)
     Chip_SPI_ClearStatus(LPC_SPI0, SPI_STAT_RXOV | SPI_STAT_TXUR | SPI_STAT_SSA | SPI_STAT_SSD);
 
     Chip_DMA_InitChannel( DMAREQ_SPI0_RX, DMA_ADDR(&LPC_SPI0->RXDAT), DMA_XFERCFG_SRCINC_0, 
-                          DMA_ADDR(&pBuffer[0]), DMA_XFERCFG_DSTINC_1, WIDTH_8_BITS,
+                          DMA_ADDR(&junk), DMA_XFERCFG_DSTINC_0, WIDTH_8_BITS,
                           1000, (DMA_CFG_PERIPHREQEN | DMA_CFG_BURSTPOWER_1 | DMA_CFG_CHPRIORITY(1)));
-    Chip_DMA_StartTransfer(DMAREQ_SPI0_RX, DMA_XFERCFG_SRCINC_0, DMA_XFERCFG_DSTINC_1, DMA_XFERCFG_WIDTH_8, 1000);
+    Chip_DMA_StartTransfer(DMAREQ_SPI0_RX, DMA_XFERCFG_SRCINC_0, DMA_XFERCFG_DSTINC_0, DMA_XFERCFG_WIDTH_8, 1000);
 
     Chip_DMA_InitChannel( DMAREQ_SPI0_TX, DMA_ADDR(&pBuffer[0]), DMA_XFERCFG_SRCINC_1,
                           DMA_ADDR(&LPC_SPI0->TXDAT), DMA_XFERCFG_DSTINC_0, WIDTH_8_BITS,
@@ -1066,9 +1063,9 @@ uint32_t SPI_DATA_WRITE(uint8_t * pBuffer, uint32_t length)
     Chip_SPI_ClearStatus(LPC_SPI0, SPI_STAT_RXOV | SPI_STAT_TXUR | SPI_STAT_SSA | SPI_STAT_SSD);
 
     Chip_DMA_InitChannel( DMAREQ_SPI0_RX, DMA_ADDR(&LPC_SPI0->RXDAT), DMA_XFERCFG_SRCINC_0, 
-                          DMA_ADDR(&pBuffer[1000]), DMA_XFERCFG_DSTINC_1, WIDTH_8_BITS,
+                          DMA_ADDR(&junk), DMA_XFERCFG_DSTINC_0, WIDTH_8_BITS,
                           length-1000, (DMA_CFG_PERIPHREQEN | DMA_CFG_BURSTPOWER_1 | DMA_CFG_CHPRIORITY(1)));
-    Chip_DMA_StartTransfer(DMAREQ_SPI0_RX, DMA_XFERCFG_SRCINC_0, DMA_XFERCFG_DSTINC_1, DMA_XFERCFG_WIDTH_8, length - 1000);
+    Chip_DMA_StartTransfer(DMAREQ_SPI0_RX, DMA_XFERCFG_SRCINC_0, DMA_XFERCFG_DSTINC_0, DMA_XFERCFG_WIDTH_8, length - 1000);
 
     Chip_DMA_InitChannel( DMAREQ_SPI0_TX, DMA_ADDR(&pBuffer[1000]), DMA_XFERCFG_SRCINC_1,
                           DMA_ADDR(&LPC_SPI0->TXDAT), DMA_XFERCFG_DSTINC_0, WIDTH_8_BITS,
@@ -1135,9 +1132,9 @@ uint32_t SPI_DATA_WRITE(uint8_t * pBuffer, uint32_t length)
     Chip_SPI_ClearStatus(LPC_SPI1, SPI_STAT_RXOV | SPI_STAT_TXUR | SPI_STAT_SSA | SPI_STAT_SSD);
 
     Chip_DMA_InitChannel( DMAREQ_SPI1_RX, DMA_ADDR(&LPC_SPI1->RXDAT), DMA_XFERCFG_SRCINC_0, 
-                          DMA_ADDR(&pBuffer[0]), DMA_XFERCFG_DSTINC_1, WIDTH_8_BITS,
+                          DMA_ADDR(&junk), DMA_XFERCFG_DSTINC_0, WIDTH_8_BITS,
                           length, (DMA_CFG_PERIPHREQEN | DMA_CFG_BURSTPOWER_1 | DMA_CFG_CHPRIORITY(1)));
-    Chip_DMA_StartTransfer(DMAREQ_SPI1_RX, DMA_XFERCFG_SRCINC_0, DMA_XFERCFG_DSTINC_1, DMA_XFERCFG_WIDTH_8, length);
+    Chip_DMA_StartTransfer(DMAREQ_SPI1_RX, DMA_XFERCFG_SRCINC_0, DMA_XFERCFG_DSTINC_0, DMA_XFERCFG_WIDTH_8, length);
 
     Chip_DMA_InitChannel( DMAREQ_SPI1_TX, DMA_ADDR(&pBuffer[0]), DMA_XFERCFG_SRCINC_1,
                           DMA_ADDR(&LPC_SPI1->TXDAT), DMA_XFERCFG_DSTINC_0, WIDTH_8_BITS,
@@ -1150,9 +1147,9 @@ uint32_t SPI_DATA_WRITE(uint8_t * pBuffer, uint32_t length)
     Chip_SPI_ClearStatus(LPC_SPI1, SPI_STAT_RXOV | SPI_STAT_TXUR | SPI_STAT_SSA | SPI_STAT_SSD);
 
     Chip_DMA_InitChannel( DMAREQ_SPI1_RX, DMA_ADDR(&LPC_SPI1->RXDAT), DMA_XFERCFG_SRCINC_0, 
-                          DMA_ADDR(&pBuffer[0]), DMA_XFERCFG_DSTINC_1, WIDTH_8_BITS,
+                          DMA_ADDR(&junk), DMA_XFERCFG_DSTINC_0, WIDTH_8_BITS,
                           1000, (DMA_CFG_PERIPHREQEN | DMA_CFG_BURSTPOWER_1 | DMA_CFG_CHPRIORITY(1)));
-    Chip_DMA_StartTransfer(DMAREQ_SPI1_RX, DMA_XFERCFG_SRCINC_0, DMA_XFERCFG_DSTINC_1, DMA_XFERCFG_WIDTH_8, 1000);
+    Chip_DMA_StartTransfer(DMAREQ_SPI1_RX, DMA_XFERCFG_SRCINC_0, DMA_XFERCFG_DSTINC_0, DMA_XFERCFG_WIDTH_8, 1000);
 
     Chip_DMA_InitChannel( DMAREQ_SPI1_TX, DMA_ADDR(&pBuffer[0]), DMA_XFERCFG_SRCINC_1,
                           DMA_ADDR(&LPC_SPI1->TXDAT), DMA_XFERCFG_DSTINC_0, WIDTH_8_BITS,
@@ -1184,9 +1181,9 @@ uint32_t SPI_DATA_WRITE(uint8_t * pBuffer, uint32_t length)
     Chip_SPI_ClearStatus(LPC_SPI1, SPI_STAT_RXOV | SPI_STAT_TXUR | SPI_STAT_SSA | SPI_STAT_SSD);
 
     Chip_DMA_InitChannel( DMAREQ_SPI1_RX, DMA_ADDR(&LPC_SPI1->RXDAT), DMA_XFERCFG_SRCINC_0, 
-                          DMA_ADDR(&pBuffer[1000]), DMA_XFERCFG_DSTINC_1, WIDTH_8_BITS,
+                          DMA_ADDR(&junk), DMA_XFERCFG_DSTINC_0, WIDTH_8_BITS,
                           length-1000, (DMA_CFG_PERIPHREQEN | DMA_CFG_BURSTPOWER_1 | DMA_CFG_CHPRIORITY(1)));
-    Chip_DMA_StartTransfer(DMAREQ_SPI1_RX, DMA_XFERCFG_SRCINC_0, DMA_XFERCFG_DSTINC_1, DMA_XFERCFG_WIDTH_8, length - 1000);
+    Chip_DMA_StartTransfer(DMAREQ_SPI1_RX, DMA_XFERCFG_SRCINC_0, DMA_XFERCFG_DSTINC_0, DMA_XFERCFG_WIDTH_8, length - 1000);
 
     Chip_DMA_InitChannel( DMAREQ_SPI1_TX, DMA_ADDR(&pBuffer[1000]), DMA_XFERCFG_SRCINC_1,
                           DMA_ADDR(&LPC_SPI1->TXDAT), DMA_XFERCFG_DSTINC_0, WIDTH_8_BITS,
@@ -1367,7 +1364,7 @@ uint32_t SPI_DATA_WRITEREAD(uint8_t * pBufferW, uint8_t * pBufferR, uint32_t len
   }
   transfer_size = spiMasterXfer.dataTXferred;
 #else
-  uint32_t i;
+//  uint32_t i;
   
   bDMASPITXDoneFlag = false;
   bDMASPIRXDoneFlag = false;
@@ -1660,7 +1657,7 @@ int sflash_platform_init( int peripheral_id, void** platform_peripheral_out )
 volatile uint8_t spi_flash_recv;
 int sflash_platform_send_recv_byte( void* platform_peripheral, unsigned char MOSI_val, void* MISO_addr )
 {
-  int ret;
+//  int ret;
   uint8_t *rcv_buf;
   if(MISO_addr != 0x00000000)
   rcv_buf = MISO_addr;

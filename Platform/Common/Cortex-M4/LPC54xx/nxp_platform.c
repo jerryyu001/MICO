@@ -33,7 +33,7 @@
 
 #include "nxp_platform.h"
 #include "platform.h"
-//Jer #include "platform_common_config.h"
+#include "platform_common_config.h"
 #include "MicoPlatform.h"
 #include "PlatformLogging.h"
 #include "rtc.h"
@@ -177,9 +177,9 @@ void init_architecture( void )
    ring_buffer_init  ( (ring_buffer_t*)&stdio_rx_buffer, (uint8_t*)stdio_rx_data, STDIO_BUFFER_SIZE );
    MicoStdioUartInitialize( &stdio_uart_config, (ring_buffer_t*)&stdio_rx_buffer );
 #endif
-  // Board_Init(); //in set() Jer1201
+   Board_Init(); //in set() Jer1201
   set();
-  //EASYLINK_GPIO_Init(); //in set() Jer1201
+  EASYLINK_GPIO_Init(); //in set() Jer1201
 }
 
 /******************************************************

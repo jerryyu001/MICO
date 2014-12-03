@@ -30,7 +30,7 @@
  */
 
  #include "board.h"
-
+#include "PlatformLogging.h"
 /*****************************************************************************
  * Private types/enumerations/variables
  ****************************************************************************/
@@ -49,7 +49,7 @@
 
 /* Set up and initialize hardware prior to call to main */
 void SystemInit(void)
-{
+{platform_log("SystemInit");
   LPC_SYSCTL->SYSAHBCLKCTRL[0] |= 0x00000018; // Magicoe
 #if defined(__FPU_PRESENT) && __FPU_PRESENT == 1
 	fpuInit();
@@ -117,7 +117,7 @@ void set(void)
   Chip_GPIO_SetPinDIROutput(LPC_GPIO, 0, 31);
   Chip_GPIO_SetPinState(LPC_GPIO, 0, 31, 1);
   
-  host_platform_bus_init();
+//  host_platform_bus_init();
   
   STATUS_GPIO_Init();
   BOOT_GPIO_Init();
